@@ -56,11 +56,11 @@
           label="账户"
           width="130">
       </el-table-column>
-      <el-table-column
-          prop="password"
-          label="密码"
-          width="130">
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="password"-->
+<!--          label="密码"-->
+<!--          width="130">-->
+<!--      </el-table-column>-->
     </el-table>
     <el-pagination style="margin-top: 20px;float: right"
                    background
@@ -81,7 +81,7 @@ export default {
       tableData:null,
       currentPage: 1,
       pageSize: 3,
-      total: '',
+      total: null,
       key: '',
       value: '',
       ruleForm: {

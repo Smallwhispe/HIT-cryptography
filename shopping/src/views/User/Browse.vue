@@ -79,7 +79,7 @@ export default {
       tableData:null,
       currentPage: 1,
       pageSize: 3,
-      total: '',
+      total: null,
       key: '',
       value: '',
       ruleForm: {

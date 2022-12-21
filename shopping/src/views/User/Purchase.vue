@@ -105,6 +105,7 @@ export default {
 
       axios.get('http://172.24.67.216:8181/caCert/GetPubkey',{params : this.caForm}).then((resp) =>{
         this.publickey = AES.decrypt(resp.data,key1);
+        console.log(this.publickey)
       });
 
       const pay = this.ruleForm.account+this.ruleForm.shopaccount+this.ruleForm.password+this.ruleForm.price
@@ -157,18 +158,18 @@ export default {
 
 
           axios.put('http://172.24.107.117:8181/users/e-business',_this.transferForm).then((resp1) =>{
-            console.log(this.transferForm.signature)
-            console.log(this.transferForm.hash)
-            console.log(this.codekey)
-            console.log(resp1.data.code)
+            // console.log(this.transferForm.signature)
+            // console.log(this.transferForm.hash)
+            // console.log(this.codekey)
+            // console.log(resp1.data.code)
             AES.decrypt(resp1.data.code, this.codekey);
             console.log(AES.decrypt(resp1.data.code, this.codekey))
-            if (AES.decrypt(resp1.data.code, this.codekey) == 0)
+            if (AES.decrypt(resp1.data.code, this.codekey) == '0')
             {
 
 
               axios.post('http://172.24.218.142:8181/cart/save',_this.ruleForm).then((resp2) => {
-                if(resp2.data.code == 0){
+                if(AES.decrypt(resp1.data.code, this.codekey) == 0){
 
 
                   _this.$alert(_this.ruleForm.name+'购买成功', '', {
