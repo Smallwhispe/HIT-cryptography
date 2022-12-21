@@ -6,6 +6,9 @@ import com.example.form.entity.cryptography.VerifyCert;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -18,21 +21,10 @@ public class RSAED {
         String username = loginMessage.getUsername();
         String password = loginMessage.getPassword();
 
-        String ca_prikey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMS/ukh1x7EfJMJY\n" +
-                "DtTqWVpTQIodlFqeOqQ0TwCw9CPJC/rpJFQ9qJSq6LSTAL+IgTv1xhRpiS7OT8Qk\n" +
-                "GGz8yQy558MoF9GXRlJY2u3RzlsDn+agXqtUrrjj59J2fzYaxWh5C+MMbvwFhgmV\n" +
-                "bw1RPFxG6mSwM3wYHXCGGEcXaqZtAgMBAAECgYBhSs47dsLA+72ZvSHYd+qnl/Oa\n" +
-                "WPY7uXMWMCfBF8Ai0hByi0fDwJnUqo9YfDkqfb4qgGbrQSTtWGhpfc/2VSq1mlX+\n" +
-                "/PRVvX9kZBYyP2rydmjhBHoXmSU8fsZr9wR475hJ89bO8J3eUqmyRiUowMom9/wD\n" +
-                "bd3FruLfeLZjFQTCoQJBAOU0PYyObmW69JR9hTEWT4+GIQV7VexXOQDhZjNzGzIs\n" +
-                "hZfJJKl9YJl/Z3zchrqPInqceyALP4cQTr8Getl4kr8CQQDbwCZ6FKV4SAypTBtL\n" +
-                "/2BQDbTQ9S93J32Ug8dYVx35FMxJdknML/z9X2HUIy+mQ0A6HMiPlDUi1godWLwp\n" +
-                "6g3TAkEAzBmr4VkH97D2kLABhgefC2heSVpd1hqJmT4d2xzaD+DTialE62TJO4bX\n" +
-                "Kbnag5BoHJTxk0RQ6r3b0YE8riEPUwJBAK0b+nOTTiKpx2eab6p3m7yUf4tYirK3\n" +
-                "5kKXaPMbdZ4hFykLyOjUKNzERcGikkfMlIzy3b/VheJScJdbrqbqHUcCQHOTEws/\n" +
-                "Sfuv7d94a8CuOs38xwk+5RA3ubOqWdgWnHNJR/Z6u8e0IQciPqT6WPjL3yjq2wiy\n" +
-                "EuGqBjWDCJuDLw4=";
-        byte[] aes_key = decrypt(key, ca_prikey).getBytes();
+        String path = "key/prikey.txt";
+        Path readingpath = Paths.get(path);
+        String prikey = Files.readString(readingpath);
+        byte[] aes_key = decrypt(key, prikey).getBytes();
 
         username = AesDecrypt(username, aes_key);
         password = AesDecrypt(password, aes_key);
@@ -48,21 +40,10 @@ public class RSAED {
         String username = userForm.getUsername();
         String password = userForm.getPassword();
 
-        String ca_prikey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMS/ukh1x7EfJMJY\n" +
-                "DtTqWVpTQIodlFqeOqQ0TwCw9CPJC/rpJFQ9qJSq6LSTAL+IgTv1xhRpiS7OT8Qk\n" +
-                "GGz8yQy558MoF9GXRlJY2u3RzlsDn+agXqtUrrjj59J2fzYaxWh5C+MMbvwFhgmV\n" +
-                "bw1RPFxG6mSwM3wYHXCGGEcXaqZtAgMBAAECgYBhSs47dsLA+72ZvSHYd+qnl/Oa\n" +
-                "WPY7uXMWMCfBF8Ai0hByi0fDwJnUqo9YfDkqfb4qgGbrQSTtWGhpfc/2VSq1mlX+\n" +
-                "/PRVvX9kZBYyP2rydmjhBHoXmSU8fsZr9wR475hJ89bO8J3eUqmyRiUowMom9/wD\n" +
-                "bd3FruLfeLZjFQTCoQJBAOU0PYyObmW69JR9hTEWT4+GIQV7VexXOQDhZjNzGzIs\n" +
-                "hZfJJKl9YJl/Z3zchrqPInqceyALP4cQTr8Getl4kr8CQQDbwCZ6FKV4SAypTBtL\n" +
-                "/2BQDbTQ9S93J32Ug8dYVx35FMxJdknML/z9X2HUIy+mQ0A6HMiPlDUi1godWLwp\n" +
-                "6g3TAkEAzBmr4VkH97D2kLABhgefC2heSVpd1hqJmT4d2xzaD+DTialE62TJO4bX\n" +
-                "Kbnag5BoHJTxk0RQ6r3b0YE8riEPUwJBAK0b+nOTTiKpx2eab6p3m7yUf4tYirK3\n" +
-                "5kKXaPMbdZ4hFykLyOjUKNzERcGikkfMlIzy3b/VheJScJdbrqbqHUcCQHOTEws/\n" +
-                "Sfuv7d94a8CuOs38xwk+5RA3ubOqWdgWnHNJR/Z6u8e0IQciPqT6WPjL3yjq2wiy\n" +
-                "EuGqBjWDCJuDLw4=";
-        byte[] aes_key = decrypt(key, ca_prikey).getBytes();
+        String path = "key/prikey.txt";
+        Path readingpath = Paths.get(path);
+        String prikey = Files.readString(readingpath);
+        byte[] aes_key = decrypt(key, prikey).getBytes();
 
         username = AesDecrypt(username, aes_key);
         password = AesDecrypt(password, aes_key);
@@ -82,21 +63,10 @@ public class RSAED {
         String username = shopForm.getUsername();
         String password = shopForm.getPassword();
 
-        String ca_prikey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMS/ukh1x7EfJMJY\n" +
-                "DtTqWVpTQIodlFqeOqQ0TwCw9CPJC/rpJFQ9qJSq6LSTAL+IgTv1xhRpiS7OT8Qk\n" +
-                "GGz8yQy558MoF9GXRlJY2u3RzlsDn+agXqtUrrjj59J2fzYaxWh5C+MMbvwFhgmV\n" +
-                "bw1RPFxG6mSwM3wYHXCGGEcXaqZtAgMBAAECgYBhSs47dsLA+72ZvSHYd+qnl/Oa\n" +
-                "WPY7uXMWMCfBF8Ai0hByi0fDwJnUqo9YfDkqfb4qgGbrQSTtWGhpfc/2VSq1mlX+\n" +
-                "/PRVvX9kZBYyP2rydmjhBHoXmSU8fsZr9wR475hJ89bO8J3eUqmyRiUowMom9/wD\n" +
-                "bd3FruLfeLZjFQTCoQJBAOU0PYyObmW69JR9hTEWT4+GIQV7VexXOQDhZjNzGzIs\n" +
-                "hZfJJKl9YJl/Z3zchrqPInqceyALP4cQTr8Getl4kr8CQQDbwCZ6FKV4SAypTBtL\n" +
-                "/2BQDbTQ9S93J32Ug8dYVx35FMxJdknML/z9X2HUIy+mQ0A6HMiPlDUi1godWLwp\n" +
-                "6g3TAkEAzBmr4VkH97D2kLABhgefC2heSVpd1hqJmT4d2xzaD+DTialE62TJO4bX\n" +
-                "Kbnag5BoHJTxk0RQ6r3b0YE8riEPUwJBAK0b+nOTTiKpx2eab6p3m7yUf4tYirK3\n" +
-                "5kKXaPMbdZ4hFykLyOjUKNzERcGikkfMlIzy3b/VheJScJdbrqbqHUcCQHOTEws/\n" +
-                "Sfuv7d94a8CuOs38xwk+5RA3ubOqWdgWnHNJR/Z6u8e0IQciPqT6WPjL3yjq2wiy\n" +
-                "EuGqBjWDCJuDLw4=";
-        byte[] aes_key = decrypt(key, ca_prikey).getBytes();
+        String path = "key/prikey.txt";
+        Path readingpath = Paths.get(path);
+        String prikey = Files.readString(readingpath);
+        byte[] aes_key = decrypt(key, prikey).getBytes();
 
         username = AesDecrypt(username, aes_key);
         password = AesDecrypt(password, aes_key);
@@ -113,20 +83,24 @@ public class RSAED {
 
     public ConfirmForm confirm(ConfirmForm confirmForm) throws Exception {
 
-        String ca_prikey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMS/ukh1x7EfJMJY\n" +
-                "DtTqWVpTQIodlFqeOqQ0TwCw9CPJC/rpJFQ9qJSq6LSTAL+IgTv1xhRpiS7OT8Qk\n" +
-                "GGz8yQy558MoF9GXRlJY2u3RzlsDn+agXqtUrrjj59J2fzYaxWh5C+MMbvwFhgmV\n" +
-                "bw1RPFxG6mSwM3wYHXCGGEcXaqZtAgMBAAECgYBhSs47dsLA+72ZvSHYd+qnl/Oa\n" +
-                "WPY7uXMWMCfBF8Ai0hByi0fDwJnUqo9YfDkqfb4qgGbrQSTtWGhpfc/2VSq1mlX+\n" +
-                "/PRVvX9kZBYyP2rydmjhBHoXmSU8fsZr9wR475hJ89bO8J3eUqmyRiUowMom9/wD\n" +
-                "bd3FruLfeLZjFQTCoQJBAOU0PYyObmW69JR9hTEWT4+GIQV7VexXOQDhZjNzGzIs\n" +
-                "hZfJJKl9YJl/Z3zchrqPInqceyALP4cQTr8Getl4kr8CQQDbwCZ6FKV4SAypTBtL\n" +
-                "/2BQDbTQ9S93J32Ug8dYVx35FMxJdknML/z9X2HUIy+mQ0A6HMiPlDUi1godWLwp\n" +
-                "6g3TAkEAzBmr4VkH97D2kLABhgefC2heSVpd1hqJmT4d2xzaD+DTialE62TJO4bX\n" +
-                "Kbnag5BoHJTxk0RQ6r3b0YE8riEPUwJBAK0b+nOTTiKpx2eab6p3m7yUf4tYirK3\n" +
-                "5kKXaPMbdZ4hFykLyOjUKNzERcGikkfMlIzy3b/VheJScJdbrqbqHUcCQHOTEws/\n" +
-                "Sfuv7d94a8CuOs38xwk+5RA3ubOqWdgWnHNJR/Z6u8e0IQciPqT6WPjL3yjq2wiy\n" +
-                "EuGqBjWDCJuDLw4=";
+//        String ca_prikey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMS/ukh1x7EfJMJY\n" +
+//                "DtTqWVpTQIodlFqeOqQ0TwCw9CPJC/rpJFQ9qJSq6LSTAL+IgTv1xhRpiS7OT8Qk\n" +
+//                "GGz8yQy558MoF9GXRlJY2u3RzlsDn+agXqtUrrjj59J2fzYaxWh5C+MMbvwFhgmV\n" +
+//                "bw1RPFxG6mSwM3wYHXCGGEcXaqZtAgMBAAECgYBhSs47dsLA+72ZvSHYd+qnl/Oa\n" +
+//                "WPY7uXMWMCfBF8Ai0hByi0fDwJnUqo9YfDkqfb4qgGbrQSTtWGhpfc/2VSq1mlX+\n" +
+//                "/PRVvX9kZBYyP2rydmjhBHoXmSU8fsZr9wR475hJ89bO8J3eUqmyRiUowMom9/wD\n" +
+//                "bd3FruLfeLZjFQTCoQJBAOU0PYyObmW69JR9hTEWT4+GIQV7VexXOQDhZjNzGzIs\n" +
+//                "hZfJJKl9YJl/Z3zchrqPInqceyALP4cQTr8Getl4kr8CQQDbwCZ6FKV4SAypTBtL\n" +
+//                "/2BQDbTQ9S93J32Ug8dYVx35FMxJdknML/z9X2HUIy+mQ0A6HMiPlDUi1godWLwp\n" +
+//                "6g3TAkEAzBmr4VkH97D2kLABhgefC2heSVpd1hqJmT4d2xzaD+DTialE62TJO4bX\n" +
+//                "Kbnag5BoHJTxk0RQ6r3b0YE8riEPUwJBAK0b+nOTTiKpx2eab6p3m7yUf4tYirK3\n" +
+//                "5kKXaPMbdZ4hFykLyOjUKNzERcGikkfMlIzy3b/VheJScJdbrqbqHUcCQHOTEws/\n" +
+//                "Sfuv7d94a8CuOs38xwk+5RA3ubOqWdgWnHNJR/Z6u8e0IQciPqT6WPjL3yjq2wiy\n" +
+//                "EuGqBjWDCJuDLw4=";
+        String path = "key/prikey.txt";
+        Path readingpath = Paths.get(path);
+        String ca_prikey = Files.readString(readingpath);
+
         VerifyCert verifyCert = new VerifyCert();
         if(MyRSA.verifySign(verifyCert.downloadCert("bank"),confirmForm.getOrderhash(),confirmForm.getSignature())){
             ConfirmForm confirmForm1 = new ConfirmForm();

@@ -68,7 +68,7 @@ export default{
       category:null,
       identity:'商家',
       ruleForm: {
-        id:1,
+        id:null,
         username: '',
         password: '',
         name: '',
@@ -102,6 +102,15 @@ export default{
     };
   },
   methods: {
+    readFile (filePath){
+      // 创建一个新的xhr对象
+      let xhr = null, okStatus = document.location.protocol === 'file' ? 0 : 200
+      xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
+      xhr.open('GET', filePath, false)
+      xhr.overrideMimeType('text/html;charset=utf-8')
+      xhr.send(null)
+      return xhr.status === okStatus ? xhr.responseText : null
+    },
     submitForm(formName) {
       const _this = this
       this.$refs[formName].validate((valid) => {
@@ -118,8 +127,10 @@ export default{
           this.registerMessage.name = this.ruleForm.name;
           this.registerMessage.gender = this.ruleForm.gender;
           this.registerMessage.account = this.ruleForm.account;
-          const rsa_pub = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEv7pIdcexHyTCWA7U6llaU0CKHZRanjqkNE8AsPQjyQv66SRUPaiUqui0kwC/iIE79cYUaYkuzk/EJBhs/MkMuefDKBfRl0ZSWNrt0c5bA5/moF6rVK644+fSdn82GsVoeQvjDG78BYYJlW8NUTxcRupksDN8GB1whhhHF2qmbQIDAQAB";
 
+          // const rsa_pub = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEv7pIdcexHyTCWA7U6llaU0CKHZRanjqkNE8AsPQjyQv66SRUPaiUqui0kwC/iIE79cYUaYkuzk/EJBhs/MkMuefDKBfRl0ZSWNrt0c5bA5/moF6rVK644+fSdn82GsVoeQvjDG78BYYJlW8NUTxcRupksDN8GB1whhhHF2qmbQIDAQAB";
+
+          const  rsa_pub = this.readFile('pubkey.txt')
           let encryptor = new JSEncrypt();
           // 设置公钥
           encryptor.setPublicKey(rsa_pub);

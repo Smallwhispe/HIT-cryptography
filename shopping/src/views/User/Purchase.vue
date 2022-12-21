@@ -31,10 +31,12 @@
 import AES from "@/AES";
 import JSEncrypt from "jsencrypt";
 import {sha256} from "js-sha256";
+import jsrsasign from "jsrsasign";
 
 export default {
   data() {
     return {
+      codekey:'',
       publickey :'',
       category:null,
       ruleForm: {
@@ -47,13 +49,14 @@ export default {
         password: ''
       },
       transferForm: {
-        username: 'trump',
-        targetname: 'admin',
+        username: 'customer',
+        targetname: 'trump1',
         password: '1',
         amount: '10000',
         key: '',
         hash: '',
         orderhash: '',
+        signature: '',
       },
       caForm: {
         user_name: 'bank',
@@ -82,6 +85,15 @@ export default {
     };
   },
   methods: {
+    readFile (filePath){
+      // 创建一个新的xhr对象
+      let xhr = null, okStatus = document.location.protocol === 'file' ? 0 : 200
+      xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
+      xhr.open('GET', filePath, false)
+      xhr.overrideMimeType('text/html;charset=utf-8')
+      xhr.send(null)
+      return xhr.status === okStatus ? xhr.responseText : null
+    },
     submitForm(formName) {
       const key1 = AES.generatekey(16);
       this.caForm.user_name = AES.encrypt(this.caForm.user_name, key1);
@@ -93,7 +105,6 @@ export default {
 
       axios.get('http://172.24.67.216:8181/caCert/GetPubkey',{params : this.caForm}).then((resp) =>{
         this.publickey = AES.decrypt(resp.data,key1);
-        console.log(this.publickey)
       });
 
       const pay = this.ruleForm.account+this.ruleForm.shopaccount+this.ruleForm.password+this.ruleForm.price
@@ -105,7 +116,7 @@ export default {
       this.transferForm.hash = sha256(str)
 
       const key = AES.generatekey(16);
-
+      this.codekey = key;
       //如果是对象/数组的话，需要先JSON.stringify转换成字符串
       // 不传key值，就默认使用上述定义好的key值
 
@@ -119,16 +130,40 @@ export default {
       const rsa_pub = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDoHP3cVQ0qxhn69rBSzPrR9Cl67fGHtOj+KYMdQ59BMHENUHoOXButrC3dlMdHBZJS/pfUdosXCb+8CfFcVx+jW2XC2hl1ekUdEaf7hWqrTM6Zm7HjMpd6I+2UJSoabUj8no3uVAZwHaHuCoqDlYVAyndKHqXePk9qQ2R8dpUPsQIDAQAB";
       let encryptor = new JSEncrypt();
       // 设置公钥
+      console.log(rsa_pub)
       encryptor.setPublicKey(rsa_pub);
       this.transferForm.key = encryptor.encrypt(key);
+
+      // 获得CA前端的私钥，从私钥文件内容中获取
+      const signPrivateKey = this.readFile(JSON.parse(window.localStorage.getItem("user")).account+'_prikey.txt');
+
+      let rsa = new jsrsasign.RSAKey();
+      const pk = '-----BEGIN PRIVATE KEY-----' + signPrivateKey + '-----END PRIVATE KEY-----';
+      rsa = jsrsasign.KEYUTIL.getKey(pk);
+
+      const sig = new jsrsasign.KJUR.crypto.Signature({
+        "alg": "SHA256withRSA",
+      });
+
+      sig.init(rsa)
+      // 传入待加签的字符串
+      sig.updateString(this.transferForm.hash);
+      // 生成签名
+      this.transferForm.signature = jsrsasign.hextob64(sig.sign());
 
       const _this = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
 
-          axios.put('http://172.24.107.117:8181/users/e-business',_this.transferForm).then((resp1) => {
-            if (resp1.data.code == 0)
+          axios.put('http://172.24.107.117:8181/users/e-business',_this.transferForm).then((resp1) =>{
+            console.log(this.transferForm.signature)
+            console.log(this.transferForm.hash)
+            console.log(this.codekey)
+            console.log(resp1.data.code)
+            AES.decrypt(resp1.data.code, this.codekey);
+            console.log(AES.decrypt(resp1.data.code, this.codekey))
+            if (AES.decrypt(resp1.data.code, this.codekey) == 0)
             {
 
 

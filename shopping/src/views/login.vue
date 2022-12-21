@@ -55,7 +55,6 @@ export default {
         username: "",
         password: "",
         key: "",
-        // hash: "",
       },
       type: 'shop',
       rules: {
@@ -69,15 +68,15 @@ export default {
     }
   },
   methods: {
-    // readFile (filePath){
-    //   // 创建一个新的xhr对象
-    //   let xhr = null, okStatus = document.location.protocol === 'file' ? 0 : 200
-    //   xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
-    //   xhr.open('GET', filePath, false)
-    //   xhr.overrideMimeType('text/html;charset=utf-8')
-    //   xhr.send(null)
-    //   return xhr.status === okStatus ? xhr.responseText : null
-    // },
+    readFile (filePath){
+      // 创建一个新的xhr对象
+      let xhr = null, okStatus = document.location.protocol === 'file' ? 0 : 200
+      xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
+      xhr.open('GET', filePath, false)
+      xhr.overrideMimeType('text/html;charset=utf-8')
+      xhr.send(null)
+      return xhr.status === okStatus ? xhr.responseText : null
+    },
     register(){
       this.$router.push('/register')
     },
@@ -92,8 +91,7 @@ export default {
           this.loginMessage.username = AES.encrypt(this.ruleForm.username, key);
           this.loginMessage.password = AES.encrypt(this.ruleForm.password, key);
 
-          const rsa_pub = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEv7pIdcexHyTCWA7U6llaU0CKHZRanjqkNE8AsPQjyQv66SRUPaiUqui0kwC/iIE79cYUaYkuzk/EJBhs/MkMuefDKBfRl0ZSWNrt0c5bA5/moF6rVK644+fSdn82GsVoeQvjDG78BYYJlW8NUTxcRupksDN8GB1whhhHF2qmbQIDAQAB";
-
+          const rsa_pub = this.readFile('pubkey.txt');
           let encryptor = new JSEncrypt();
           // 设置公钥
           encryptor.setPublicKey(rsa_pub);
@@ -122,7 +120,6 @@ export default {
           // sig.updateString(this.loginMessage.username+this.loginMessage.password+this.loginMessage.key);
           // // 生成密文
           // this.loginMessage.hash = jsrsasign.hextob64(sig.sign());
-
 
           this.logining = true
           let _this = this
